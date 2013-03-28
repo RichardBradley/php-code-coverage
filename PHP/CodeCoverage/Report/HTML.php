@@ -126,33 +126,9 @@ class PHP_CodeCoverage_Report_HTML
 
         $date = date('D M j G:i:s T Y', $_SERVER['REQUEST_TIME']);
 
-        $dashboard = new PHP_CodeCoverage_Report_HTML_Renderer_Dashboard(
-          $this->templatePath,
-          $this->charset,
-          $this->generator,
-          $date,
-          $this->lowUpperBound,
-          $this->highLowerBound
-        );
-
-        $directory = new PHP_CodeCoverage_Report_HTML_Renderer_Directory(
-          $this->templatePath,
-          $this->charset,
-          $this->generator,
-          $date,
-          $this->lowUpperBound,
-          $this->highLowerBound
-        );
-
-        $file = new PHP_CodeCoverage_Report_HTML_Renderer_File(
-          $this->templatePath,
-          $this->charset,
-          $this->generator,
-          $date,
-          $this->lowUpperBound,
-          $this->highLowerBound,
-          $this->highlight
-        );
+        $dashboard = $this->createDashboardRenderer($date);
+        $directory = $this->createDirectoryRenderer($date);
+        $file = $this->createFileRenderer($date);
 
         $dashboard->render($report, $target . 'index.dashboard.html');
         $directory->render($report, $target . 'index.html');
@@ -217,6 +193,61 @@ class PHP_CodeCoverage_Report_HTML
             'Directory "%s" does not exist.',
             $directory
           )
+        );
+    }
+
+    /**
+     * Create the renderer for the dashboards which are placed in each dir.
+     *
+     * @param $date string   the report date
+     * @return PHP_CodeCoverage_Report_HTML_Renderer_Dashboard
+     */
+    protected function createDashboardRenderer($date)
+    {
+        return new PHP_CodeCoverage_Report_HTML_Renderer_Dashboard(
+            $this->templatePath,
+            $this->charset,
+            $this->generator,
+            $date,
+            $this->lowUpperBound,
+            $this->highLowerBound
+        );
+    }
+
+    /**
+     * Create the renderer for the directories.
+     *
+     * @param $date string   the report date
+     * @return PHP_CodeCoverage_Report_HTML_Renderer_Directory
+     */
+    protected function createDirectoryRenderer($date)
+    {
+        return new PHP_CodeCoverage_Report_HTML_Renderer_Directory(
+            $this->templatePath,
+            $this->charset,
+            $this->generator,
+            $date,
+            $this->lowUpperBound,
+            $this->highLowerBound
+        );
+    }
+
+    /**
+     * Create the renderer for the file reports.
+     *
+     * @param $date string   the report date
+     * @return PHP_CodeCoverage_Report_HTML_Renderer_File
+     */
+    protected function createFileRenderer($date)
+    {
+        return new PHP_CodeCoverage_Report_HTML_Renderer_File(
+            $this->templatePath,
+            $this->charset,
+            $this->generator,
+            $date,
+            $this->lowUpperBound,
+            $this->highLowerBound,
+            $this->highlight
         );
     }
 }
