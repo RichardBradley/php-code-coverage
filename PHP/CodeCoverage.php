@@ -878,6 +878,16 @@ class PHP_CodeCoverage
                 }
             }
 
+            if (count($this->filter->getExcludeCommits())) {
+                $excludeCommits = $this->filter->getExcludeCommits();
+                $blameLines = PHP_CodeCoverage_Git_Blame::getBlameInfo($filename);
+                foreach ($blameLines as $blameLine) {
+                    if (in_array($blameLine->rev, $excludeCommits)) {
+                        $this->ignoredLines[$filename][] = $blameLine->lineNo;
+                    }
+                }
+            }
+
             if ($this->cacheTokens) {
                 $tokens = PHP_Token_Stream_CachingFactory::get($filename);
             } else {

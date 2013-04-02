@@ -76,6 +76,13 @@ class PHP_CodeCoverage_Filter
     protected $blacklistPrefilled = FALSE;
 
     /**
+     * List of SCM commits which are to be excluded.
+     *
+     * @var array
+     */
+    protected $excludeCommits = array();
+
+    /**
      * Adds a directory to the blacklist (recursively).
      *
      * @param string $directory
@@ -340,5 +347,15 @@ class PHP_CodeCoverage_Filter
         }
 
         $this->addDirectoryToBlacklist($directory);
+    }
+
+    public function setExcludeCommits($excludeCommits)
+    {
+        $this->excludeCommits = $excludeCommits;
+    }
+
+    public function getExcludeCommits()
+    {
+        return $this->excludeCommits;
     }
 }
